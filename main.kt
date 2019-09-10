@@ -29,7 +29,7 @@ class DirectoryWithParent(private val parentDirectory: DirectoryWithParent?, pri
         val child = curDir[name] as? Directory
         return when (name) {
             "", "." -> this
-            ".." -> parentDirectory
+            ".." -> parentDirectory ?: this
             else -> DirectoryWithParent(this, child ?: return null, name)
         }
     }
@@ -69,7 +69,7 @@ inline class DirectoryWithSymlinkResolution(private val underlying: DirectoryWit
             return cnpRoot[name.substring(1)]
         // Parse the first component up to the target
         val currentName = name.substringBefore("/")
-        val remainder = name.substringAfter("/")
+        val remainder = name.substringAfter("/").trimStart('/')
         val currentResolved = this[currentName] ?: return null
         return currentResolved[remainder]
     }
