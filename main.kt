@@ -87,16 +87,17 @@ fun interactiveListCurrent(curDir: DirectoryWithSymlinkResolution) {
 }
 fun interactiveListChild(curDir: DirectoryWithSymlinkResolution, target: String) {
     val child = curDir()()[target]
-    if (child == null) {
+    val childDir = curDir()[target]
+    if (child == null && childDir == null) {
         println("Error: No such file or directory $target")
         return
     }
-    if (child !is Directory) {
+    if (childDir == null) {
         println(target)
         return
     }
     // Since we know that the child is a directory, we can just do the below
-    interactiveListCurrent(curDir[target]!!)
+    interactiveListCurrent(DirectoryWithSymlinkResolution(childDir))
 }
 fun interactivePrintFile(curDir: DirectoryWithSymlinkResolution, target: String) {
     when (val entry = curDir()()[target]) {
