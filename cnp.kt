@@ -205,12 +205,12 @@ class Cnp(val name: String) {
     }
     fun altaZi(target: Int): Cnp = setZZ(target)
     val judet: String get() = judete[JJ]!!
-    val judeteValide: List<String> get() = judete.map {it.value}
+    val judeteValide: List<String> = judete.map {it.value}
     fun altJudet(target: String): Cnp = altJudet(judeteInv[target]!!)
     val judetNumeric: Int get() = JJ
-    val judeteNumericeValide: List<Int> get() = (1..46).toList() + listOf(51, 52)
+    val judeteNumericeValide: List<Int> = (1..46).toList() + listOf(51, 52)
     fun altJudet(target: Int): Cnp = setJJ(target)
-    val judeteGeneraleValide: List<String> get() = judeteNumericeValide.map(Int::toString) + judeteValide
+    val judeteGeneraleValide: List<String> = judeteNumericeValide.map(Int::toString) + judeteValide
     fun altJudetGeneral(target: String): Cnp {
         val judetNumeric: Int? = target.toIntOrNull()
         return if (judetNumeric == null)

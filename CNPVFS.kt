@@ -70,26 +70,11 @@ class FinalDirectory(cnp: String): Directory {
     }
 
     override val entries: List<String>
-        get() {
-            val result = mutableListOf<String>()
-            // Add a few classes
-            result.add("valid")
-            if (!cnp.valid)
-                return result
-            result.add("nationalitate")
-            result.add("sex")
-            result.add("an")
-            result.add("luna")
-            result.add("numeLuna")
-            result.add("zi")
-            result.add("judet")
-            result.add("judetNumeric")
-            result.add("nnn")
-            result.add("name")
-            // allow changes
-            result.add("schimba")
-            return result
-        }
+        get() = if (cnp.valid)
+            listOf("valid", "nationalitate", "sex", "an", "luna", "numeLuna", "zi", "judet", "judetNumeric",
+                "nnn", "name", "schimba")
+        else
+            listOf("valid")
 
     override fun toString(): String = "/$cnp"
 }
@@ -115,10 +100,7 @@ class ChangesList(private val cnp: Cnp): VFSEntry, Directory {
         }
     }
 
-    override val entries: List<String>
-        get() {
-            return listOf("nationalitate", "sex", "an", "luna", "zi", "judet", "nnn")
-        }
+    override val entries: List<String> = listOf("nationalitate", "sex", "an", "luna", "zi", "judet", "nnn")
 
     override fun toString(): String = "/$cnp/schimba"
 }
@@ -142,7 +124,7 @@ class YearList(private val cnp: Cnp): Directory {
 class MonthList(private val cnp: Cnp): Directory {
     override fun get(name: String): VFSEntry? = if (name in entries) get(name.toInt()) else null
     fun get(month: Int): VFSEntry = SimpleLink("/" + cnp.altaLuna(month).name)
-    override val entries: List<String> get() = (1..12).map(Int::toString)
+    override val entries: List<String> = (1..12).map(Int::toString)
     override fun toString(): String = "/$cnp/schimba/luna"
 }
 class DayList(private val cnp: Cnp): Directory {
@@ -153,12 +135,12 @@ class DayList(private val cnp: Cnp): Directory {
 }
 class CountyList(private val cnp: Cnp): Directory {
     override fun get(name: String): VFSEntry? = if (name in entries) SimpleLink("/" + cnp.altJudetGeneral(name).name) else null
-    override val entries: List<String> get() = cnp.judeteGeneraleValide
+    override val entries: List<String> = cnp.judeteGeneraleValide
     override fun toString(): String = "/$cnp/schimba/judet"
 }
 class NNNList(private val cnp: Cnp): Directory {
     override fun get(name: String): VFSEntry? = if (name in entries) get(name.toInt()) else null
     fun get(nnn: Int): VFSEntry = SimpleLink("/" + cnp.altNnn(nnn).toString())
-    override val entries: List<String> get() = (0..999).map { it.toString().padStart(3, '0') }
+    override val entries: List<String> = (0..999).map { it.toString().padStart(3, '0') }
     override fun toString(): String = "/$cnp/schimba/nnn"
 }
